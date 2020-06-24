@@ -166,7 +166,7 @@
                             offset-y
                             min-width="290px"
                           >
-                            <template v-slot:activator="{ on, attrs }">
+                            <template v-slot:activator="{on, attrs}">
                               <v-text-field
                                 v-model="date"
                                 :rules="dateRules"
@@ -535,11 +535,11 @@
 
 <script>
 // checkbox
-import { EnhancedToggle } from "vue-enhanced-check";
+import {EnhancedToggle} from 'vue-enhanced-check';
 //popup
-import swal from "sweetalert";
+import swal from 'sweetalert';
 export default {
-  name: "Home",
+  name: 'Home',
   components: {
     // HelloWorld,
     EnhancedToggle,
@@ -548,57 +548,57 @@ export default {
     allowSpaces: false,
 
     max: 13,
-    idcard: "",
+    idcard: '',
     idcardRules: [
-      (v) => !!v || "ชื่อยังไม่ได้ระบุ",
-      (v) => v.length <= 13 || "ระบุเลขประจำตัวประชาชนได้ไม่เกิน 13 หลัก",
+      (v) => !!v || 'ชื่อยังไม่ได้ระบุ',
+      (v) => v.length <= 13 || 'ระบุเลขประจำตัวประชาชนได้ไม่เกิน 13 หลัก',
     ],
-    name: "",
-    nameRules: [(v) => !!v || "ชื่อยังไม่ได้ระบุ"],
-    lastname: "",
-    lastnameRules: [(v) => !!v || "นามสกุลยังไม่ได้ระบุ"],
+    name: '',
+    nameRules: [(v) => !!v || 'ชื่อยังไม่ได้ระบุ'],
+    lastname: '',
+    lastnameRules: [(v) => !!v || 'นามสกุลยังไม่ได้ระบุ'],
     // date: new Date().toISOString().substr(0, 10),
-    date: "",
-    dateRules: [(v) => !!v || "วันที่ยังไม่ได้ระบุ"],
-    schools: ["โรงเรียน1", "โรงเรียน2", "โรงเรียน3", "โรงเรียน4"],
+    date: '',
+    dateRules: [(v) => !!v || 'วันที่ยังไม่ได้ระบุ'],
+    schools: ['โรงเรียน1', 'โรงเรียน2', 'โรงเรียน3', 'โรงเรียน4'],
 
     classes: [
-      "อนุบาล 1",
-      "อนุบาล 2",
-      "อนุบาล 3",
-      "ประถมศึกษา 1",
-      "ประถมศึกษา 2",
-      "ประถมศึกษา 3",
-      "ประถมศึกษา 4",
-      "ประถมศึกษา 5",
-      "ประถมศึกษา 6",
-      "มัธยมศึกษา 1",
-      "มัธยมศึกษา 2",
-      "มัธยมศึกษา 3",
-      "มัธยมศึกษา 4",
-      "มัธยมศึกษา 5",
-      "มัธยมศึกษา 6",
+      'อนุบาล 1',
+      'อนุบาล 2',
+      'อนุบาล 3',
+      'ประถมศึกษา 1',
+      'ประถมศึกษา 2',
+      'ประถมศึกษา 3',
+      'ประถมศึกษา 4',
+      'ประถมศึกษา 5',
+      'ประถมศึกษา 6',
+      'มัธยมศึกษา 1',
+      'มัธยมศึกษา 2',
+      'มัธยมศึกษา 3',
+      'มัธยมศึกษา 4',
+      'มัธยมศึกษา 5',
+      'มัธยมศึกษา 6',
     ],
 
-    rooms: ["1", "2", "3", "4", "5", "7", "8", "9", "10"],
+    rooms: ['1', '2', '3', '4', '5', '7', '8', '9', '10'],
 
-    choice1: "",
-    choice2: "",
-    choice3: "",
-    choice4: "",
-    choice5: "",
-    choice6: "",
-    choice7: "",
-    choice8: "",
-    choice9: "",
-    choice10: "",
-    choice11: "",
-    choice_other: "",
-    history1: "",
-    history2: "",
-    history3: "",
-    history4: "",
-    history5: "",
+    choice1: '',
+    choice2: '',
+    choice3: '',
+    choice4: '',
+    choice5: '',
+    choice6: '',
+    choice7: '',
+    choice8: '',
+    choice9: '',
+    choice10: '',
+    choice11: '',
+    choice_other: '',
+    history1: '',
+    history2: '',
+    history3: '',
+    history4: '',
+    history5: '',
   }),
 
   methods: {
@@ -607,10 +607,10 @@ export default {
     },
     save() {
       swal({
-        title: "แจ้งเตือน!",
-        text: "ท่านยังกรอกข้อมูลไม่ครบ!",
-        icon: "error",
-        button: "ปิด",
+        title: 'แจ้งเตือน!',
+        text: 'ท่านยังกรอกข้อมูลไม่ครบ!',
+        icon: 'error',
+        button: 'ปิด',
       });
     },
   },
