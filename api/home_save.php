@@ -3,21 +3,25 @@ header('Access-Control-Allow-Origin: *');
 include 'conn.php';
 
 
+$date = $_GET["date"];
 $idcard = $_GET["idcard"];
-$name = $_GET["name"];
-$lastname = $_GET["lastname"];
-$nickname = $_GET["nickname"];
-$age = $_GET["age"];
-$schools = $_GET["schools"];
-$classes = $_GET["classes"];
-$rooms=  $_GET["rooms"];
-$tel=  $_GET["tel"];
-$guardian=  $_GET["guardian"];
-$guardian_tel=  $_GET["guardian_tel"];
-$relate= $_GET["relate"];
-$address=  $_GET["address"];
-$cometo=  $_GET["cometo"];	
-$teacher=  $_GET["teacher"];	
+$choice1 = $_GET["choice1"];
+$choice2 = $_GET["choice2"];
+$choice3 = $_GET["choice3"];
+$choice4 = $_GET["choice4"];
+$choice5 = $_GET["choice5"];
+$choice6 = $_GET["choice6"];
+$choice7=  $_GET["choice7"];
+$choice8=  $_GET["choice8"];
+$choice9=  $_GET["choice9"];
+$choice10=  $_GET["choice10"];
+$choice11= $_GET["choice11"];
+$choice_other=  $_GET["choice_other"];
+$history1=  $_GET["history1"];	
+$history2=  $_GET["history2"];	
+$history3=  $_GET["history3"];
+$history4=  $_GET["history4"];
+$history5=  $_GET["history5"];
 
 
 
@@ -27,16 +31,13 @@ $teacher=  $_GET["teacher"];
 
 
 
-        $strvisit  = "  INSERT INTO person_screen(idcard,name,lastname,nickname,age,schools,classes,
-        rooms,tel,guardian,guardian_tel,relate,address,cometo,
-        teacher,d_update
-        ) 
-       VALUES('".$idcard."','".$name."','".$lastname."','".$nickname."','".$age."','".$schools."','".$classes."',
-       '".$rooms."','".$tel."','".$guardian."','".$guardian_tel."','".$relate."','".$address."', '".$cometo."',
-       '".$teacher."',CURRENT_TIMESTAMP
-       )";
+        $strvisit  = "  INSERT INTO day_screen(date,idcard,choice1,choice2,choice3,choice4,choice5,choice6,
+        choice7,choice8,choice9,choice10,choice11,choice_other,history1,history2,history3,history4,history5,d_update) 
+       VALUES('".$date."','".$idcard."','".$choice1."','".$choice2."','".$choice3."','".$choice4."','".$choice5."','".$choice6."',
+       '".$choice7."','".$choice8."','".$choice9."','".$choice10."','".$choice11."','".$choice_other."', '".$history1."',
+       '".$history2."','".$history3."','".$history4."','".$history5."',CURRENT_TIMESTAMP)";
         if ($conn->query($strvisit) === TRUE) {
-            // echo "ระบบทำงานเสร็จสมบูรณ์";
+           
             
             $return_message = array();
             $row_array['message'] = "เพิ่มข้อมูลสำเร็จ";
@@ -44,7 +45,7 @@ $teacher=  $_GET["teacher"];
         
         
         } else {
-            // echo "Error: " . $sql . "<br>" . $conn->error;
+           
             $return_message = array();
             $row_array['message'] = "เพิ่มข้อมูลไม่สำเร็จ";
             array_push($return_message,$row_array);

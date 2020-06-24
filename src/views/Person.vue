@@ -39,6 +39,7 @@
                             <div class="headline"></div>
 
                             <v-text-field
+                              type="number"
                               v-model="idcard"
                               :counter="max"
                               :rules="idcardRules"
@@ -91,8 +92,10 @@
                         ><div>
                           <v-card-text>
                             <v-text-field
+                              type="number"
                               v-model="age"
                               label="อายุ"
+                              :rules="ageRules"
                               :height="20"
                               outlined
                             ></v-text-field
@@ -107,6 +110,7 @@
                               label="โรงเรียน"
                               :rules="schoolRules"
                               outlined
+                              v-model="school"
                             ></v-select>
                           </v-card-text>
                         </div>
@@ -118,6 +122,7 @@
                               :items="classes"
                               label="ระดับชั้น"
                               :rules="classRules"
+                              v-model="classselect"
                               outlined
                             ></v-select>
                           </v-card-text>
@@ -130,6 +135,7 @@
                               :items="rooms"
                               label="ห้อง"
                               :rules="roomRules"
+                              v-model="room"
                               outlined
                             ></v-select
                           ></v-card-text>
@@ -141,6 +147,7 @@
                             <v-text-field
                               v-model="tel"
                               label="เบอร์โทร"
+                              :rules="telRules"
                               :height="20"
                               outlined
                             ></v-text-field>
@@ -153,6 +160,7 @@
                             <v-text-field
                               v-model="guardian"
                               label="ชื่อผู้ปกครอง"
+                              :rules="guardianRules"
                               :height="20"
                               outlined
                             ></v-text-field
@@ -165,6 +173,7 @@
                             <v-text-field
                               v-model="guardian_tel"
                               label="เบอร์โทรผู้ปกครอง"
+                              :rules="guardian_telRules"
                               :height="20"
                               outlined
                             ></v-text-field
@@ -189,6 +198,7 @@
                             <v-text-field
                               v-model="address"
                               label="ที่อยู่"
+                              :rules="addressRules"
                               :height="20"
                               outlined
                             ></v-text-field
@@ -226,7 +236,12 @@
 
               <v-col class="d-flex" cols="12">
                 <div class="my-2">
-                  <v-btn large color="#9BDEAC">
+                  <v-btn
+                    large
+                    color="#9BDEAC"
+                    :disabled="!isValid"
+                    @click="save"
+                  >
                     <v-icon class="white--text" dark
                       >mdi-content-save-all</v-icon
                     ></v-btn
@@ -243,13 +258,13 @@
 
 <script>
 //popup
-import swal from 'sweetalert';
+import swal from "sweetalert";
 //database
-import axios from 'axios';
-import {APIPath} from '../../service/APIPath';
+import axios from "axios";
+import { APIPath } from "../../service/APIPath";
 const apiPath = new APIPath();
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     // HelloWorld,
   },
@@ -257,47 +272,59 @@ export default {
     allowSpaces: false,
     isValid: true,
     max: 13,
-    idcard: '',
+    idcard: "",
     idcardRules: [
-      (v) => !!v || 'ชื่อยังไม่ได้ระบุ',
-      (v) => v.length <= 13 || 'ระบุเลขประจำตัวประชาชนได้ไม่เกิน 13 หลัก',
+      (v) => !!v || "เลขประจำตัวประชาชนยังไม่ได้ระบุ",
+      (v) =>
+        (v && v.length >= 13 && v && v.length < 14) ||
+        "ต้องระบุเลขประจำตัวประชาชนให้ครบ 13 หลัก",
     ],
-    name: '',
-    nameRules: [(v) => !!v || 'ชื่อยังไม่ได้ระบุ'],
-    lastname: '',
-    lastnameRules: [(v) => !!v || 'นามสกุลยังไม่ได้ระบุ'],
-    nickname: '',
-    age: '',
-
-    schools: ['โรงเรียน1', 'โรงเรียน2', 'โรงเรียน3', 'โรงเรียน4'],
-    schoolRules: [(v) => !!v || 'โรงเรียนยังไม่ได้ระบุ'],
+    name: "",
+    nameRules: [(v) => !!v || "ชื่อยังไม่ได้ระบุ"],
+    lastname: "",
+    lastnameRules: [(v) => !!v || "นามสกุลยังไม่ได้ระบุ"],
+    nickname: "",
+    age: "",
+    ageRules: [
+      (v) => !!v || "อายุยังไม่ได้ระบุ",
+      (v) => (v && v.length >= 1 && v && v.length <= 2) || "อายุไม่เกิน99ปี",
+    ],
+    school: "",
+    schools: ["โรงเรียน1", "โรงเรียน2", "โรงเรียน3", "โรงเรียน4"],
+    // schoolRules: [(v) => !!v || "โรงเรียนยังไม่ได้ระบุ"],
+    classselect: "",
     classes: [
-      'อนุบาล 1',
-      'อนุบาล 2',
-      'อนุบาล 3',
-      'ประถมศึกษา 1',
-      'ประถมศึกษา 2',
-      'ประถมศึกษา 3',
-      'ประถมศึกษา 4',
-      'ประถมศึกษา 5',
-      'ประถมศึกษา 6',
-      'มัธยมศึกษา 1',
-      'มัธยมศึกษา 2',
-      'มัธยมศึกษา 3',
-      'มัธยมศึกษา 4',
-      'มัธยมศึกษา 5',
-      'มัธยมศึกษา 6',
+      "อนุบาล 1",
+      "อนุบาล 2",
+      "อนุบาล 3",
+      "ประถมศึกษา 1",
+      "ประถมศึกษา 2",
+      "ประถมศึกษา 3",
+      "ประถมศึกษา 4",
+      "ประถมศึกษา 5",
+      "ประถมศึกษา 6",
+      "มัธยมศึกษา 1",
+      "มัธยมศึกษา 2",
+      "มัธยมศึกษา 3",
+      "มัธยมศึกษา 4",
+      "มัธยมศึกษา 5",
+      "มัธยมศึกษา 6",
     ],
-    classRules: [(v) => !!v || 'ระดับชั้นยังไม่ได้ระบุ'],
-    rooms: ['1', '2', '3', '4', '5', '7', '8', '9', '10'],
-    roomRules: [(v) => !!v || 'ห้องยังไม่ได้ระบุ'],
-    tel: '',
-    guardian: '',
-    guardian_tel: '',
-    relate: '',
-    address: '',
-    cometo: '',
-    teacher: '',
+    classRules: [(v) => !!v || "ระดับชั้นยังไม่ได้ระบุ"],
+    rooms: ["1", "2", "3", "4", "5", "7", "8", "9", "10"],
+    roomRules: [(v) => !!v || "ห้องยังไม่ได้ระบุ"],
+    tel: "",
+    telRules: [(v) => !!v || "เบอร์โทรยังไม่ได้ระบุ"],
+    guardian: "",
+    guardianRules: [(v) => !!v || "ชื่อผู้ปกครองยังไม่ได้ระบุ"],
+    guardian_tel: "",
+    guardian_telRules: [(v) => !!v || "เบอร์โทรยังไม่ได้ระบุ"],
+    relate: "",
+    address: "",
+    addressRules: [(v) => !!v || "ที่อยู่ยังไม่ได้ระบุ"],
+    cometo: "",
+    teacher: "",
+    ok: "",
   }),
 
   methods: {
@@ -306,34 +333,43 @@ export default {
     },
     save() {
       axios
-        .get(`${apiPath.getBaseUrl()}home_save.php`, {
+        .get(`${apiPath.getBaseUrl()}person_save.php`, {
           params: {
-            idcard: this.input.idcard,
+            idcard: this.idcard,
+            name: this.name,
+            lastname: this.lastname,
+            nickname: this.nickname,
+            age: this.age,
+            school: this.school,
+            classselect: this.classselect,
+            room: this.room,
+            tel: this.tel,
+            guardian: this.guardian,
+            guardian_tel: this.guardian_tel,
+            relate: this.relate,
+            address: this.address,
+            cometo: this.cometo,
+            teacher: this.teacher,
           },
         })
         .then((response) => {
-          this.input.ok = response.data;
-          if (this.input.ok[0].message == 'เพิ่มข้อมูลสำเร็จ') {
-            // this.$message.success(
-            //   'สำเร็จ: ' + this.input.ok[0].message,
-            //   5000
-            // );
+          this.ok = response.data;
+          if (this.ok[0].message == "เพิ่มข้อมูลสำเร็จ") {
             swal({
-              title: 'แจ้งเตือน!',
-              text: this.input.ok[0].message,
-              icon: 'success',
-              button: 'ปิด',
+              title: "แจ้งเตือน!",
+              text: this.ok[0].message,
+              icon: "success",
+              button: "ปิด",
             });
           } else {
-            // this.$message.error('เตือน: ' + this.input.ok[0].message, 5000);
             swal({
-              title: 'แจ้งเตือน!',
-              text: this.input.ok[0].message,
-              icon: 'error',
-              button: 'ปิด',
+              title: "แจ้งเตือน!",
+              text: this.ok[0].message,
+              icon: "error",
+              button: "ปิด",
             });
           }
-          this.$router.push('/');
+          this.$router.push("/");
         });
     },
   },
