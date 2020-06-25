@@ -36,7 +36,7 @@
                                   offset-y
                                   min-width="290px"
                                 >
-                                  <template v-slot:activator="{on, attrs}">
+                                  <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
                                       v-model="date"
                                       :rules="dateRules"
@@ -120,7 +120,7 @@
                           dark
                           large
                           color="#9BDEAC"
-                          @click="idsearch"
+                          @click="search_student"
                         >
                           <v-icon dark>mdi-account-search</v-icon>
                         </v-btn></v-card-text
@@ -146,32 +146,41 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <!-- <tr v-for="item in desserts" :key="item.name"> -->
-                              <!-- <td>{{ item.name }}</td>
-                              <td>{{ item.calories }}</td> -->
-                              <tr>
+                              <tr v-for="item in student_data" :key="item.num">
                                 <td>ชื่อโรงเรียน</td>
-                                <td>โรงเรียน1</td>
+                                <td>{{ item.schools }}</td>
                               </tr>
-                              <tr>
+                              <tr v-for="item in student_data" :key="item.num">
                                 <td>ระดับชั้น</td>
-                                <td>ประถมศึกษา 1 ห้อง 2</td>
+                                <td>
+                                  {{ item.classes }} ห้อง
+                                  {{ item.rooms }}
+                                </td>
                               </tr>
-                              <tr>
+                              <tr v-for="item in student_data" :key="item.num">
                                 <td>วันที่ประเมิน</td>
-                                <td>23/03/2020</td>
+                                <td>{{ item.date | formatDate }}</td>
                               </tr>
-                              <tr>
+
+                              <tr v-for="item in student_data" :key="item.num">
                                 <td>จำนวนนักเรียนห้องในห้อง</td>
-                                <td>50</td>
+                                <td>{{ item.alls }}</td>
                               </tr>
-                              <tr>
+                              <tr v-for="item in student_data" :key="item.num">
                                 <td>จำนวนนักเรียนที่ประเมิน</td>
-                                <td>48</td>
+                                <td>{{ item.totals }}</td>
                               </tr>
-                              <tr>
+                              <tr v-for="item in student_data" :key="item.num">
+                                <td>ผ่านเกณฑ์</td>
+                                <td>{{ item.ok }}</td>
+                              </tr>
+                              <tr v-for="item in student_data" :key="item.num">
+                                <td>ไม่ผ่านเกณฑ์</td>
+                                <td>{{ item.nook }}</td>
+                              </tr>
+                              <tr v-for="item in student_data" :key="item.num">
                                 <td>จำนวนนักเรียนที่ไม่ประเมิน</td>
-                                <td>2</td>
+                                <td>{{ item.no_screen }}</td>
                               </tr>
                             </tbody>
                           </template>
@@ -189,38 +198,68 @@
   </v-container>
 </template>
 <script>
-// @ is an alias to /src
-
+//database
+import axios from "axios";
+import { APIPath } from "../../service/APIPath";
+const apiPath = new APIPath();
+import moment from "moment";
 export default {
-  name: 'About',
+  name: "About",
   components: {},
   data() {
     return {
-      date: '',
+      date: "",
       isValid: true,
-      school: '',
-      schools: ['โรงเรียน1', 'โรงเรียน2', 'โรงเรียน3', 'โรงเรียน4'],
-      classselect: '',
+      school: "",
+      school_select: "",
+      schools: ["โรงเรียน1", "โรงเรียน2", "โรงเรียน3", "โรงเรียน4"],
+      classselect: "",
+      classselect_select: "",
       classes: [
-        'อนุบาล 1',
-        'อนุบาล 2',
-        'อนุบาล 3',
-        'ประถมศึกษา 1',
-        'ประถมศึกษา 2',
-        'ประถมศึกษา 3',
-        'ประถมศึกษา 4',
-        'ประถมศึกษา 5',
-        'ประถมศึกษา 6',
-        'มัธยมศึกษา 1',
-        'มัธยมศึกษา 2',
-        'มัธยมศึกษา 3',
-        'มัธยมศึกษา 4',
-        'มัธยมศึกษา 5',
-        'มัธยมศึกษา 6',
+        "อนุบาล 1",
+        "อนุบาล 2",
+        "อนุบาล 3",
+        "ประถมศึกษา 1",
+        "ประถมศึกษา 2",
+        "ประถมศึกษา 3",
+        "ประถมศึกษา 4",
+        "ประถมศึกษา 5",
+        "ประถมศึกษา 6",
+        "มัธยมศึกษา 1",
+        "มัธยมศึกษา 2",
+        "มัธยมศึกษา 3",
+        "มัธยมศึกษา 4",
+        "มัธยมศึกษา 5",
+        "มัธยมศึกษา 6",
       ],
-      room: '',
-      rooms: ['1', '2', '3', '4', '5', '7', '8', '9', '10'],
+      room: "",
+      room_select: "",
+      rooms: ["1", "2", "3", "4", "5", "7", "8", "9", "10"],
+      student_data: "",
     };
+  },
+  methods: {
+    search_student() {
+      axios
+        .get(`${apiPath.getBaseUrl()}home_select.php`, {
+          params: {
+            date: this.date,
+            school: this.school,
+            classselect: this.classselect,
+            room: this.room,
+          },
+        })
+        .then((response) => {
+          this.student_data = response.data;
+        });
+    },
+  },
+  filters: {
+    formatDate: function(value) {
+      if (value) {
+        return moment(String(value)).format("MM/DD/YYYY");
+      }
+    },
   },
 };
 </script>
