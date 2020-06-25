@@ -84,9 +84,9 @@ export default {
   data: () => ({
     drawer: false,
     items: [
-      { icon: "mdi-hospital-building", text: "แบบฟอร์ม", link: "/" },
-      { icon: "mdi-clipboard-account", text: "ประวัติ", link: "/person" },
-      { icon: "mdi-console", text: "ผลการประเมิน", link: "/data" },
+      {icon: 'mdi-clipboard-account', text: 'ประวัติ', link: '/person'},
+      {icon: 'mdi-hospital-building', text: 'แบบฟอร์ม', link: '/'},
+      {icon: 'mdi-console', text: 'ผลการประเมิน', link: '/data'},
     ],
   }),
 };

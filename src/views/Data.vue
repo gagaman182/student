@@ -18,13 +18,13 @@
             </v-flex>
             <v-flex xs12>
               <v-card>
-                <v-card-text> <div>ระบุวันที่ประเมิน</div></v-card-text>
+                <v-card-text> <div>ระบุข้อมูลที่จะค้นหา</div></v-card-text>
                 <v-container fluid grid-list-lg>
                   <v-layout row>
                     <v-flex xs12>
                       <v-container fluid grid-list-lg>
                         <v-layout row>
-                          <v-flex xs12
+                          <v-flex xs12 md12
                             ><div>
                               <v-col class="d-flex" cols="12">
                                 <v-menu
@@ -36,7 +36,7 @@
                                   offset-y
                                   min-width="290px"
                                 >
-                                  <template v-slot:activator="{ on, attrs }">
+                                  <template v-slot:activator="{on, attrs}">
                                     <v-text-field
                                       v-model="date"
                                       :rules="dateRules"
@@ -71,10 +71,48 @@
                               </v-col>
                             </div>
                           </v-flex>
+                          <v-flex xs12 md4
+                            ><div>
+                              <v-card-text>
+                                <v-select
+                                  :items="schools"
+                                  label="โรงเรียน"
+                                  outlined
+                                  v-model="school"
+                                ></v-select>
+                              </v-card-text>
+                            </div>
+                          </v-flex>
+                          <v-flex xs12 md4
+                            ><div>
+                              <v-card-text>
+                                <v-select
+                                  :items="classes"
+                                  label="ระดับชั้น"
+                                  :rules="classRules"
+                                  v-model="classselect"
+                                  outlined
+                                ></v-select>
+                              </v-card-text>
+                            </div>
+                          </v-flex>
+                          <v-flex xs12 md4
+                            ><div>
+                              <v-card-text>
+                                <v-select
+                                  :items="rooms"
+                                  label="ห้อง"
+                                  :rules="roomRules"
+                                  v-model="room"
+                                  outlined
+                                ></v-select
+                              ></v-card-text>
+                            </div>
+                          </v-flex>
                         </v-layout>
                       </v-container>
                     </v-flex>
-                    <v-flex xs12
+                    <v-flex xs12 md4
                       ><v-card-text>
                         <v-btn
                           class="mx-2"
@@ -154,11 +192,34 @@
 // @ is an alias to /src
 
 export default {
-  name: "About",
+  name: 'About',
   components: {},
   data() {
     return {
-      date: "",
+      date: '',
+      isValid: true,
+      school: '',
+      schools: ['โรงเรียน1', 'โรงเรียน2', 'โรงเรียน3', 'โรงเรียน4'],
+      classselect: '',
+      classes: [
+        'อนุบาล 1',
+        'อนุบาล 2',
+        'อนุบาล 3',
+        'ประถมศึกษา 1',
+        'ประถมศึกษา 2',
+        'ประถมศึกษา 3',
+        'ประถมศึกษา 4',
+        'ประถมศึกษา 5',
+        'ประถมศึกษา 6',
+        'มัธยมศึกษา 1',
+        'มัธยมศึกษา 2',
+        'มัธยมศึกษา 3',
+        'มัธยมศึกษา 4',
+        'มัธยมศึกษา 5',
+        'มัธยมศึกษา 6',
+      ],
+      room: '',
+      rooms: ['1', '2', '3', '4', '5', '7', '8', '9', '10'],
     };
   },
 };
