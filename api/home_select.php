@@ -51,10 +51,10 @@ left join day_screen on person_screen.idcard = day_screen.idcard
 
 
  
-where day_screen.date = '".$date."'
- and person_screen.schools = '".$school."'
- and person_screen.classes = '".$classselect."'
- and person_screen.rooms = '".$room."'
+where 
+person_screen.schools = '".$school."'
+and person_screen.classes = '".$classselect."'
+and person_screen.rooms = '".$room."'
 and day_screen.idcard is  null)no_screen on person_screen.schools  = no_screen.schools AND
 person_screen.classes  = no_screen.classes AND
 person_screen.rooms  = no_screen.rooms
