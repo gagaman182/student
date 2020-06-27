@@ -1,34 +1,25 @@
 <template>
   <v-container fluid>
-    <v-form v-model="isValid" ref="form">
-      <div
-        id="e3"
-        style="max-width: 100%; margin: auto;"
-        class="grey lighten-3"
-      >
-        <v-toolbar color="pink">
-          <v-toolbar-side-icon></v-toolbar-side-icon>
-          <v-toolbar-title class="white--text">
-            <v-icon dark>mdi-console</v-icon> COVID-19
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-        <v-card>
-          <v-container fluid style="min-height: 0;" grid-list-lg>
-            <v-layout row wrap>
+    <div id="e3" style="max-width: 100%; margin: auto;" class="grey lighten-3">
+      <v-toolbar color="pink">
+        <v-toolbar-side-icon></v-toolbar-side-icon>
+        <v-toolbar-title class="white--text">
+          <v-icon dark>mdi-console</v-icon> COVID-19
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+      </v-toolbar>
+      <v-card>
+        <v-container fluid style="min-height: 0;" grid-list-lg>
+          <v-layout row wrap>
+            <v-form v-model="isValid" ref="form">
               <v-flex xs12>
                 <v-card color="#e2979c" class="white--text">
                   <v-card-title class="headline ">ข้อมูลนักเรียน</v-card-title>
-                  <v-card-subtitle class="white--text"
-                    >แสดงผลข้อมูลนักเรียน</v-card-subtitle
-                  >
                 </v-card>
               </v-flex>
               <v-flex xs12>
                 <v-card>
-                  <v-card-text>
-                    <div><h3>ระบุข้อมูลที่จะค้นหา</h3></div></v-card-text
-                  >
+                  <v-card-text> <div>ระบุข้อมูลที่จะค้นหา</div></v-card-text>
                   <v-container fluid grid-list-lg>
                     <v-layout row>
                       <v-flex xs12>
@@ -37,26 +28,29 @@
                             <v-flex xs12 md12
                               ><div>
                                 <v-col class="d-flex" cols="12">
-                                  <v-dialog
-                                    ref="dialog"
-                                    v-model="modal"
+                                  <v-menu
+                                    ref="menu"
+                                    v-model="menu"
+                                    :close-on-content-click="false"
                                     :return-value.sync="date"
-                                    persistent
-                                    width="290px"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
                                   >
                                     <template v-slot:activator="{ on, attrs }">
                                       <v-text-field
                                         v-model="date"
+                                        :rules="dateRules"
                                         label="วันที่ประเมิน"
                                         readonly
                                         v-bind="attrs"
                                         v-on="on"
                                         outlined
-                                        prepend-inner-icon="mdi-calendar"
                                       ></v-text-field>
                                     </template>
                                     <v-date-picker
                                       v-model="date"
+                                      no-title
                                       scrollable
                                       locale="th-CZ"
                                     >
@@ -64,17 +58,17 @@
                                       <v-btn
                                         text
                                         color="primary"
-                                        @click="modal = false"
-                                        >ยกเลิก</v-btn
+                                        @click="menu = false"
+                                        >Cancel</v-btn
                                       >
                                       <v-btn
                                         text
                                         color="primary"
-                                        @click="$refs.dialog.save(date)"
-                                        >ตกลง</v-btn
+                                        @click="$refs.menu.save(date)"
+                                        >OK</v-btn
                                       >
                                     </v-date-picker>
-                                  </v-dialog>
+                                  </v-menu>
                                 </v-col>
                               </div>
                             </v-flex>
@@ -84,9 +78,9 @@
                                   <v-select
                                     :items="schools"
                                     label="โรงเรียน"
+                                    outlined
                                     :rules="schoolRules"
                                     v-model="school"
-                                    outlined
                                   ></v-select>
                                 </v-card-text>
                               </div>
@@ -142,7 +136,7 @@
               </v-flex>
               <v-flex xs12>
                 <v-card>
-                  <v-card-text><h3>แสดงผล</h3> </v-card-text>
+                  <v-card-text> </v-card-text>
                   <v-container fluid grid-list-lg>
                     <v-layout row>
                       <v-flex xs12
@@ -151,8 +145,8 @@
                             <template v-slot:default>
                               <thead>
                                 <tr>
-                                  <th class="text-left"><h2>ข้อมูล</h2></th>
-                                  <th class="text-left"><h2>จำนวน(คน)</h2></th>
+                                  <th class="text-left">ข้อมูล</th>
+                                  <th class="text-left">จำนวน(คน)</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -160,93 +154,81 @@
                                   v-for="item in student_data"
                                   :key="item.num"
                                 >
-                                  <td><h3>ชื่อโรงเรียน</h3></td>
+                                  <td>ชื่อโรงเรียน</td>
+                                  <td>{{ item.schools }}</td>
+                                </tr>
+                                <tr
+                                  v-for="item in student_data"
+                                  :key="item.num"
+                                >
+                                  <td>ระดับชั้น</td>
                                   <td>
-                                    <h3>{{ item.schools }}</h3>
+                                    {{ item.classes }} ห้อง
+                                    {{ item.rooms }}
                                   </td>
                                 </tr>
                                 <tr
                                   v-for="item in student_data"
                                   :key="item.num"
                                 >
-                                  <td><h3>ระดับชั้น</h3></td>
-                                  <td>
-                                    <h3>
-                                      {{ item.classes }} ห้อง {{ item.rooms }}
-                                    </h3>
-                                  </td>
-                                </tr>
-                                <tr
-                                  v-for="item in student_data"
-                                  :key="item.num"
-                                >
-                                  <td><h3>วันที่ประเมิน</h3></td>
-                                  <td>
-                                    <h3>{{ item.date | formatDate }}</h3>
-                                  </td>
+                                  <td>วันที่ประเมิน</td>
+                                  <td>{{ item.date | formatDate }}</td>
                                 </tr>
 
                                 <tr
                                   v-for="item in student_data"
                                   :key="item.num"
                                 >
-                                  <td><h3>จำนวนนักเรียนห้องในห้อง</h3></td>
-                                  <td>
-                                    <h3>{{ item.alls }}</h3>
-                                  </td>
+                                  <td>จำนวนนักเรียนห้องในห้อง</td>
+                                  <td>{{ item.alls }}</td>
                                 </tr>
                                 <tr
                                   v-for="item in student_data"
                                   :key="item.num"
                                 >
-                                  <td><h3>จำนวนนักเรียนที่ประเมิน</h3></td>
-                                  <td>
-                                    <h3>{{ item.totals }}</h3>
-                                  </td>
+                                  <td>จำนวนนักเรียนที่ประเมิน</td>
+                                  <td>{{ item.totals }}</td>
                                 </tr>
                                 <tr
                                   v-for="item in student_data"
                                   :key="item.num"
                                 >
-                                  <td><h3>ผ่านเกณฑ์</h3></td>
-                                  <td>
-                                    <h3>{{ item.ok }}</h3>
-                                  </td>
+                                  <td>ผ่านเกณฑ์</td>
+                                  <td>{{ item.ok }}</td>
                                 </tr>
                                 <tr
                                   v-for="item in student_data"
                                   :key="item.num"
                                 >
-                                  <td><h3>ไม่ผ่านเกณฑ์</h3></td>
-                                  <td>
-                                    <h3>{{ item.nook }}</h3>
-                                  </td>
+                                  <td>ไม่ผ่านเกณฑ์</td>
+                                  <td>{{ item.nook }}</td>
                                 </tr>
                                 <tr
                                   v-for="item in student_data"
                                   :key="item.num"
                                 >
-                                  <td><h3>จำนวนนักเรียนที่ไม่ประเมิน</h3></td>
+                                  <td>จำนวนนักเรียนที่ไม่ประเมิน</td>
+                                  <td>{{ item.no_screen }}</td>
+                                </tr>
+                                <tr>
                                   <td>
-                                    <h3>{{ item.no_screen }}</h3>
+                                    <v-card-text>
+                                      <v-btn
+                                        fab
+                                        :disabled="!isValid"
+                                        color="#9BDEAC"
+                                        @click="student_detail"
+                                      >
+                                        <v-icon dark class="white--text"
+                                          >mdi-format-list-bulleted-square</v-icon
+                                        >
+                                      </v-btn></v-card-text
+                                    >
                                   </td>
                                 </tr>
                               </tbody>
                             </template>
                           </v-simple-table>
-                          <v-card-text>
-                            <v-btn
-                              fab
-                              large
-                              :disabled="!isValid"
-                              color="#9BDEAC"
-                              @click="student_detail"
-                            >
-                              <v-icon dark class="white--text"
-                                >mdi-format-list-bulleted-square</v-icon
-                              >
-                            </v-btn></v-card-text
-                          >
                         </div>
                       </v-flex>
                     </v-layout>
@@ -289,13 +271,11 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-            </v-layout>
-          </v-container>
-        </v-card>
-
-        <vm-back-top></vm-back-top>
-      </div>
-    </v-form>
+            </v-form>
+          </v-layout>
+        </v-container>
+      </v-card>
+    </div>
   </v-container>
 </template>
 <script>

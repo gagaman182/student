@@ -38,17 +38,21 @@
                     <v-avatar color="#0A97B0" size="36">
                       <span class="white--text headline">2</span>
                     </v-avatar>
-                    <div>ค้นหานักเรียนจากเลขประจำตัวประชาชน 13 หลัก</div>
+                    <div>
+                      <h3>ค้นหานักเรียนจากเลขประจำตัวประชาชน 13 หลัก</h3>
+                    </div>
                   </v-card-text>
                   <v-card-title primary-title>
                     <div class="headline"></div>
 
                     <v-card-text>
                       <v-text-field
+                        type="number"
                         v-model="idcard"
                         :counter="max"
                         :rules="idcardRules"
-                        label="เลขประจำตัวประชาชน 13 หลัก"
+                        label="เลขประจำตัวประชาชน13หลัก"
+                        prepend-inner-icon="mdi-nature-people"
                         :height="20"
                         outlined
                       ></v-text-field
@@ -58,12 +62,13 @@
                     <v-btn
                       class="mx-2"
                       fab
-                      dark
                       large
                       color="#9BDEAC"
                       @click="search_id"
                     >
-                      <v-icon dark>mdi-account-search</v-icon>
+                      <v-icon dark class="white--text"
+                        >mdi-account-search</v-icon
+                      >
                     </v-btn></v-card-text
                   >
                 </v-card>
@@ -72,7 +77,7 @@
               <v-flex xs12>
                 <v-card>
                   <v-card-text>
-                    <div>ประวัติ</div>
+                    <div><h3>ประวัติ</h3></div>
                   </v-card-text>
                   <v-container fluid grid-list-lg>
                     <v-layout row>
@@ -149,36 +154,33 @@
               <v-flex xs12>
                 <v-card>
                   <v-card-text>
-                    <div>วันที่</div>
+                    <div><h3>วันที่</h3></div>
                   </v-card-text>
                   <v-container fluid grid-list-lg>
                     <v-layout row>
                       <v-flex xs12
                         ><div>
                           <v-col class="d-flex" cols="12">
-                            <v-menu
-                              ref="menu"
-                              v-model="menu"
-                              :close-on-content-click="false"
+                            <v-dialog
+                              ref="dialog"
+                              v-model="modal"
                               :return-value.sync="date"
-                              transition="scale-transition"
-                              offset-y
-                              min-width="290px"
+                              persistent
+                              width="290px"
                             >
                               <template v-slot:activator="{ on, attrs }">
                                 <v-text-field
                                   v-model="date"
-                                  :rules="dateRules"
                                   label="วันที่ประเมิน"
                                   readonly
                                   v-bind="attrs"
                                   v-on="on"
+                                  prepend-inner-icon="mdi-calendar"
                                   outlined
                                 ></v-text-field>
                               </template>
                               <v-date-picker
                                 v-model="date"
-                                no-title
                                 scrollable
                                 locale="th-CZ"
                               >
@@ -186,17 +188,17 @@
                                 <v-btn
                                   text
                                   color="primary"
-                                  @click="menu = false"
-                                  >Cancel</v-btn
+                                  @click="modal = false"
+                                  >ยกเลิก</v-btn
                                 >
                                 <v-btn
                                   text
                                   color="primary"
-                                  @click="$refs.menu.save(date)"
-                                  >OK</v-btn
+                                  @click="$refs.dialog.save(date)"
+                                  >ตกลง</v-btn
                                 >
                               </v-date-picker>
-                            </v-menu>
+                            </v-dialog>
                           </v-col>
                         </div>
                       </v-flex>
@@ -209,7 +211,7 @@
               <v-flex xs12>
                 <v-card>
                   <v-card-text>
-                    <div>มีอาการเหล่านี้หรือไม่</div>
+                    <div><h3>มีอาการเหล่านี้หรือไม่</h3></div>
                     <div><code>&lt;ต้องตอบทุกข้อ&gt;</code></div>
                   </v-card-text>
                   <v-container fluid grid-list-lg>
@@ -461,7 +463,9 @@
               <v-flex xs12>
                 <v-card>
                   <v-card-text>
-                    <div>มีประวัติเหล่านี้หรือไม่ ในช่วง 14 วันที่ผ่านมา</div>
+                    <div>
+                      <h3>มีประวัติเหล่านี้หรือไม่ ในช่วง 14 วันที่ผ่านมา</h3>
+                    </div>
                   </v-card-text>
                   <v-container fluid grid-list-lg>
                     <v-layout row>
@@ -537,6 +541,8 @@
           </v-layout>
         </v-container>
       </v-card>
+
+      <vm-back-top></vm-back-top>
     </div>
   </v-container>
 </template>
@@ -550,6 +556,7 @@ import swal from "sweetalert";
 import axios from "axios";
 import { APIPath } from "../../service/APIPath";
 const apiPath = new APIPath();
+
 export default {
   name: "Home",
   components: {
@@ -629,6 +636,15 @@ export default {
         })
         .then((response) => {
           this.person_data = response.data;
+          if (this.person_data[0].idcard == this.idcard) {
+            swal({
+              title: "แจ้งเตือน",
+              text:
+                "ระบบค้นพบข้อมูลเลข13หลัก" + " " + this.person_data[0].idcard,
+              icon: "success",
+              button: "ปิด",
+            });
+          }
           this.get_person(this.person_data);
         });
     },

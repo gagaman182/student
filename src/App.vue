@@ -73,6 +73,22 @@
         <strong>กลุ่มงานเวชกรรมสังคม โรงพยาบาลหาดใหญ่</strong>
       </v-col>
     </v-footer> -->
+    <v-bottom-navigation v-model="bottomNav" dark shift>
+      <v-btn @click="homeclick()">
+        <span>ประวัติ</span>
+        <v-icon>mdi-clipboard-account</v-icon>
+      </v-btn>
+
+      <v-btn @click="personclick()">
+        <span>แบบฟอร์ม</span>
+        <v-icon>mdi-hospital-building</v-icon>
+      </v-btn>
+
+      <v-btn @click="dataclick()">
+        <span>ผลการประเมิน</span>
+        <v-icon>mdi-console</v-icon>
+      </v-btn>
+    </v-bottom-navigation>
   </v-app>
 </template>
 
@@ -84,10 +100,21 @@ export default {
   data: () => ({
     drawer: false,
     items: [
-      {icon: 'mdi-clipboard-account', text: 'ประวัติ', link: '/person'},
-      {icon: 'mdi-hospital-building', text: 'แบบฟอร์ม', link: '/'},
-      {icon: 'mdi-console', text: 'ผลการประเมิน', link: '/data'},
+      { icon: "mdi-clipboard-account", text: "ประวัติ", link: "/person" },
+      { icon: "mdi-hospital-building", text: "แบบฟอร์ม", link: "/" },
+      { icon: "mdi-console", text: "ผลการประเมิน", link: "/data" },
     ],
   }),
+  methods: {
+    homeclick() {
+      this.$router.push("/");
+    },
+    personclick() {
+      this.$router.push("/person");
+    },
+    dataclick() {
+      this.$router.push("/data");
+    },
+  },
 };
 </script>

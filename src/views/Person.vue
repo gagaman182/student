@@ -29,7 +29,7 @@
                     <v-avatar color="#0A97B0" size="36">
                       <span class="white--text headline">1</span>
                     </v-avatar>
-                    <div>ข้อมูลทั่วไป</div>
+                    <div><h3>ข้อมูลทั่วไป</h3></div>
                   </v-card-text>
                   <v-container fluid grid-list-lg>
                     <v-layout row>
@@ -46,6 +46,7 @@
                               label="เลขประจำตัวประชาชน 13 หลัก"
                               :height="20"
                               outlined
+                              prepend-inner-icon="mdi-nature-people"
                             ></v-text-field>
                           </v-card-title>
                         </div>
@@ -252,19 +253,21 @@
           </v-layout>
         </v-container>
       </v-card>
+
+      <vm-back-top></vm-back-top>
     </div>
   </v-container>
 </template>
 
 <script>
 //popup
-import swal from 'sweetalert';
+import swal from "sweetalert";
 //database
-import axios from 'axios';
-import {APIPath} from '../../service/APIPath';
+import axios from "axios";
+import { APIPath } from "../../service/APIPath";
 const apiPath = new APIPath();
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     // HelloWorld,
   },
@@ -272,60 +275,60 @@ export default {
     allowSpaces: false,
     isValid: true,
     max: 13,
-    idcard: '',
+    idcard: "",
     idcardRules: [
-      (v) => !!v || 'เลขประจำตัวประชาชนยังไม่ได้ระบุ',
+      (v) => !!v || "เลขประจำตัวประชาชนยังไม่ได้ระบุ",
       (v) =>
         (v && v.length >= 13 && v && v.length < 14) ||
-        'ต้องระบุเลขประจำตัวประชาชนให้ครบ 13 หลัก',
+        "ต้องระบุเลขประจำตัวประชาชนให้ครบ 13 หลัก",
     ],
-    name: '',
-    nameRules: [(v) => !!v || 'ชื่อยังไม่ได้ระบุ'],
-    lastname: '',
-    lastnameRules: [(v) => !!v || 'นามสกุลยังไม่ได้ระบุ'],
-    nickname: '',
-    age: '',
+    name: "",
+    nameRules: [(v) => !!v || "ชื่อยังไม่ได้ระบุ"],
+    lastname: "",
+    lastnameRules: [(v) => !!v || "นามสกุลยังไม่ได้ระบุ"],
+    nickname: "",
+    age: "",
     ageRules: [
-      (v) => !!v || 'อายุยังไม่ได้ระบุ',
-      (v) => (v && v.length >= 1 && v && v.length <= 2) || 'อายุไม่เกิน99ปี',
+      (v) => !!v || "อายุยังไม่ได้ระบุ",
+      (v) => (v && v.length >= 1 && v && v.length <= 2) || "อายุไม่เกิน99ปี",
     ],
-    school: '',
-    schools: ['โรงเรียน1', 'โรงเรียน2', 'โรงเรียน3', 'โรงเรียน4'],
+    school: "",
+    schools: ["โรงเรียน1", "โรงเรียน2", "โรงเรียน3", "โรงเรียน4"],
     // schoolRules: [(v) => !!v || "โรงเรียนยังไม่ได้ระบุ"],
-    classselect: '',
+    classselect: "",
     classes: [
-      'อนุบาล 1',
-      'อนุบาล 2',
-      'อนุบาล 3',
-      'ประถมศึกษา 1',
-      'ประถมศึกษา 2',
-      'ประถมศึกษา 3',
-      'ประถมศึกษา 4',
-      'ประถมศึกษา 5',
-      'ประถมศึกษา 6',
-      'มัธยมศึกษา 1',
-      'มัธยมศึกษา 2',
-      'มัธยมศึกษา 3',
-      'มัธยมศึกษา 4',
-      'มัธยมศึกษา 5',
-      'มัธยมศึกษา 6',
+      "อนุบาล 1",
+      "อนุบาล 2",
+      "อนุบาล 3",
+      "ประถมศึกษา 1",
+      "ประถมศึกษา 2",
+      "ประถมศึกษา 3",
+      "ประถมศึกษา 4",
+      "ประถมศึกษา 5",
+      "ประถมศึกษา 6",
+      "มัธยมศึกษา 1",
+      "มัธยมศึกษา 2",
+      "มัธยมศึกษา 3",
+      "มัธยมศึกษา 4",
+      "มัธยมศึกษา 5",
+      "มัธยมศึกษา 6",
     ],
-    classRules: [(v) => !!v || 'ระดับชั้นยังไม่ได้ระบุ'],
-    room: '',
-    rooms: ['1', '2', '3', '4', '5', '7', '8', '9', '10'],
-    roomRules: [(v) => !!v || 'ห้องยังไม่ได้ระบุ'],
-    tel: '',
-    telRules: [(v) => !!v || 'เบอร์โทรยังไม่ได้ระบุ'],
-    guardian: '',
-    guardianRules: [(v) => !!v || 'ชื่อผู้ปกครองยังไม่ได้ระบุ'],
-    guardian_tel: '',
-    guardian_telRules: [(v) => !!v || 'เบอร์โทรยังไม่ได้ระบุ'],
-    relate: '',
-    address: '',
-    addressRules: [(v) => !!v || 'ที่อยู่ยังไม่ได้ระบุ'],
-    cometo: '',
-    teacher: '',
-    ok: '',
+    classRules: [(v) => !!v || "ระดับชั้นยังไม่ได้ระบุ"],
+    room: "",
+    rooms: ["1", "2", "3", "4", "5", "7", "8", "9", "10"],
+    roomRules: [(v) => !!v || "ห้องยังไม่ได้ระบุ"],
+    tel: "",
+    telRules: [(v) => !!v || "เบอร์โทรยังไม่ได้ระบุ"],
+    guardian: "",
+    guardianRules: [(v) => !!v || "ชื่อผู้ปกครองยังไม่ได้ระบุ"],
+    guardian_tel: "",
+    guardian_telRules: [(v) => !!v || "เบอร์โทรยังไม่ได้ระบุ"],
+    relate: "",
+    address: "",
+    addressRules: [(v) => !!v || "ที่อยู่ยังไม่ได้ระบุ"],
+    cometo: "",
+    teacher: "",
+    ok: "",
   }),
 
   methods: {
@@ -355,22 +358,22 @@ export default {
         })
         .then((response) => {
           this.ok = response.data;
-          if (this.ok[0].message == 'เพิ่มข้อมูลสำเร็จ') {
+          if (this.ok[0].message == "เพิ่มข้อมูลสำเร็จ") {
             swal({
-              title: 'แจ้งเตือน!',
+              title: "แจ้งเตือน!",
               text: this.ok[0].message,
-              icon: 'success',
-              button: 'ปิด',
+              icon: "success",
+              button: "ปิด",
             });
           } else {
             swal({
-              title: 'แจ้งเตือน!',
+              title: "แจ้งเตือน!",
               text: this.ok[0].message,
-              icon: 'error',
-              button: 'ปิด',
+              icon: "error",
+              button: "ปิด",
             });
           }
-          this.$router.push('/');
+          this.$router.push("/");
         });
     },
   },
