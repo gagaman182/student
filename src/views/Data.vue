@@ -304,6 +304,8 @@ import axios from "axios";
 import { APIPath } from "../../service/APIPath";
 const apiPath = new APIPath();
 import moment from "moment";
+//popup
+import swal from "sweetalert";
 export default {
   name: "About",
   components: {},
@@ -359,6 +361,26 @@ export default {
         })
         .then((response) => {
           this.student_data = response.data;
+
+          if (this.student_data[0].date == this.date) {
+            swal({
+              title: "แจ้งเตือน",
+              text:
+                "ระบบค้นพบข้อมูลโรงเรียน" +
+                " " +
+                this.student_data[0].schools +
+                " " +
+                "ระดับชั้น" +
+                " " +
+                this.student_data[0].classes +
+                " " +
+                "ห้อง" +
+                " " +
+                this.student_data[0].rooms,
+              icon: "success",
+              button: "ปิด",
+            });
+          }
         });
     },
     student_detail() {
